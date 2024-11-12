@@ -1,0 +1,199 @@
+<html><head>
+  <meta charset="UTF-8">
+  <title>$?</title>
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      overflow: hidden;
+      font-family: "Comic Sans MS", cursive;
+    }
+    
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      perspective: 1000px;
+    }
+    
+    .image-wrapper {
+      position: relative;
+      margin: 10px;
+      transition: transform 0.5s;
+      animation: float 3s infinite alternate;
+    }
+    
+    img {
+      max-width: 300px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px #ff00ff;
+      animation: rainbow-border 2s infinite;
+    }
+    
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(-20px) rotate(360deg); }
+    }
+    
+    @keyframes rainbow-border {
+      0% { box-shadow: 0 0 20px #ff00ff; }
+      33% { box-shadow: 0 0 20px #00ff00; }
+      66% { box-shadow: 0 0 20px #0000ff; }
+      100% { box-shadow: 0 0 20px #ff00ff; }
+    }
+    
+    .comic-text {
+      position: fixed;
+      font-size: 72px;
+      color: #ff00ff;
+      text-shadow: 3px 3px #00ff00;
+      animation: spin 1s infinite;
+      pointer-events: none;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  
+    .rainbow-trail {
+      position: fixed;
+      pointer-events: none;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      mix-blend-mode: screen;
+    }
+  
+    .color-changing-text {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      font-size: 48px;
+      color: #ff00ff; /* Initial color */
+      pointer-events: none;
+      transition: color 0.5s;
+    }
+  </style>
+  </head>
+  <body>
+  <div class="container">
+    <div class="image-wrapper">
+      <img src="img1.png" alt="brainrot meme 1" width="300" height="300">
+    </div>
+    <div class="image-wrapper">
+      <img src="img2.jpg" alt="brainrot meme 2" width="300" height="300">
+    </div>
+    <div class="image-wrapper">
+      <img src="img3.jpg" alt="brainrot meme 3" width="300" height="300">
+    </div>
+    <div class="image-wrapper">
+      <img src="img4.png" alt="brainrot meme 4" width="300" height="300">
+    </div>
+    <div class="image-wrapper">
+      <img src="img5.jpg" alt="brainrot meme 5" width="300" height="300">
+    </div>
+    <div class="image-wrapper">
+      <img src="img6.png" alt="brainrot meme 6" width="300" height="300">
+    </div>
+    <div class="image-wrapper">
+      <img src="img7.jpg" alt="brainrot meme 7" width="300" height="300">
+    </div>
+  </div>
+  
+  <div class="color-changing-text">ca:</div>
+  
+  <script>
+  const phrases = ["BRAINROT", "WHEEZE", "HELP", "I CAN'T", "SCREAMING", "LOL", "DYING"];
+  let trails = [];
+  
+  function createTrail(x, y) {
+    const trail = document.createElement('div');
+    trail.className = 'rainbow-trail';
+    trail.style.left = x + 'px';
+    trail.style.top = y + 'px';
+    trail.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+    document.body.appendChild(trail);
+    trails.push({
+      element: trail,
+      life: 100
+    });
+  }
+  
+  function createFloatingText(x, y) {
+    const text = document.createElement('div');
+    text.className = 'comic-text';
+    text.textContent = phrases[Math.floor(Math.random() * phrases.length)];
+    text.style.left = x + 'px';
+    text.style.top = y + 'px';
+    document.body.appendChild(text);
+    setTimeout(() => document.body.removeChild(text), 1000);
+  }
+  
+  document.addEventListener('mousemove', (e) => {
+    createTrail(e.clientX, e.clientY);
+  });
+  
+  document.addEventListener('click', (e) => {
+    createFloatingText(e.clientX, e.clientY);
+  });
+  
+  function updateTrails() {
+    trails.forEach((trail, index) => {
+      trail.life -= 2;
+      trail.element.style.opacity = trail.life / 100;
+      if (trail.life <= 0) {
+        trail.element.remove();
+        trails.splice(index, 1);
+      }
+    });
+    requestAnimationFrame(updateTrails);
+  }
+  
+  updateTrails();
+  
+  // Make images draggable and spinnable
+  document.querySelectorAll('.image-wrapper').forEach(wrapper => {
+    let isDragging = false;
+    let currentX;
+    let currentY;
+    let initialX;
+    let initialY;
+    let rotationSpeed = 0;
+  
+    wrapper.addEventListener('mousedown', e => {
+      isDragging = true;
+      initialX = e.clientX - wrapper.offsetLeft;
+      initialY = e.clientY - wrapper.offsetTop;
+      rotationSpeed = Math.random() * 720 - 360; // Random rotation between -360 and 360 degrees
+      wrapper.style.transition = 'none';
+    });
+  
+    document.addEventListener('mousemove', e => {
+      if (isDragging) {
+        e.preventDefault();
+        currentX = e.clientX - initialX;
+        currentY = e.clientY - initialY;
+        wrapper.style.transform = `translate(${currentX}px, ${currentY}px) rotate(${rotationSpeed}deg)`;
+      }
+    });
+  
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+      wrapper.style.transition = 'transform 0.5s';
+      wrapper.style.transform = 'none';
+    });
+  });
+  
+  // Change color of "ca:" text
+  const colorChangingText = document.querySelector('.color-changing-text');
+  
+  function changeTextColor() {
+    colorChangingText.style.color = `hsl(${Math.random() * 360}, 100%, 50%)`;
+  }
+  
+  setInterval(changeTextColor, 1000); // Change color every second
+  </script>
+  </body></html>
