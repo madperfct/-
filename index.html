@@ -17,6 +17,20 @@
       min-height: 100vh;
       perspective: 1000px;
     }
+
+    /* New styles for the button */
+    .center-button {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 48px;
+      color: #ff00ff;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      z-index: 10; /* Ensure it is above other elements */
+    }
     
     .image-wrapper {
       position: relative;
@@ -79,7 +93,10 @@
   </style>
   </head>
   <body>
-  <div class="container">
+  <!-- New button added here -->
+  <button class="center-button" id="startButton">(click)?</button>
+  
+  <div class="container" id="content" style="display: none;">
     <div class="image-wrapper">
       <img src="img1.png" alt="brainrot meme 1" width="300" height="300">
     </div>
@@ -104,6 +121,12 @@
   </div>
   
   <div class="color-changing-text">ca:</div>
+  
+  <!-- Audio element added for background music -->
+  <audio id="backgroundAudio" loop>
+    <source src="audio.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
   
   <script>
   const phrases = ["BRAINROT", "WHEEZE", "HELP", "I CAN'T", "SCREAMING", "LOL", "DYING"];
@@ -195,5 +218,13 @@
   }
   
   setInterval(changeTextColor, 1000); // Change color every second
+
+  // Show content when button is clicked and play audio
+  document.getElementById('startButton').addEventListener('click', () => {
+    document.getElementById('content').style.display = 'flex';
+    document.getElementById('startButton').style.display = 'none'; // Hide button after click
+    const audio = document.getElementById('backgroundAudio');
+    audio.play(); // Start playing audio
+  });
   </script>
   </body></html>
