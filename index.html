@@ -1,14 +1,23 @@
 <html><head>
   <meta charset="UTF-8">
   <title>$?</title>
+  <link rel="icon" href="pfp.png" type="image/x-icon">
   <style>
     body {
       margin: 0;
-      background: #000;
+      background: linear-gradient(270deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #7f00ff, #ff0000);
+      background-size: 400% 400%;
+      animation: rainbowBackground 10s ease infinite;
       overflow: hidden;
       font-family: "Comic Sans MS", cursive;
     }
     
+    @keyframes rainbowBackground {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
     .container {
       display: flex;
       flex-wrap: wrap;
